@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 cloudinary.config(
     cloud_name = "dqij85zsh",
-    api_key = "435279559118372",
+    api_key = "428295586246342",
     api_secret = "qv9Dq6_18jJzjx40V7X1Ok2bMOg"
 )
 
@@ -48,5 +48,6 @@ def save():
     return render_template("result.html", name=name, image_url=image_url)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000, debug=True)
+
 
