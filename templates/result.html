@@ -46,7 +46,8 @@
         <p>Thank you, {{name}}</p>
         <p>This is your captured photo:</p>
 
-        <img src="{{ url_for('static', filename=filename) }}" alt="Captured Photo">
+        <img src="{{ image_url }}">
+
 
         <p>You may now close this page.</p>
     </div>

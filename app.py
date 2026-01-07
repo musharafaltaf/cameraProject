@@ -1,9 +1,18 @@
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from flask import Flask, render_template, request
 import base64
 from datetime import datetime
 import os
 
 app = Flask(__name__)
+cloudinary.config(
+    cloud_name = "dqij85zsh",
+    api_key = "435279559118372",
+    api_secret = "qv9Dq6_18jJzjx40V7X1Ok2bMOg"
+)
+
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
 
 
@@ -25,15 +34,18 @@ def save():
 
     name = name.replace(" ", "_")
 
-    filename = name + "_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".jpg"
-    filepath = os.path.join("static", filename)
+    filename = name + "_" + datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    with open(filepath, "wb") as f:
-        f.write(img)
+    # Upload to Cloudinary
+    upload_result = cloudinary.uploader.upload(
+        img,
+        public_id=filename
+    )
 
-    # Send filename to result page
-    return render_template("result.html", name=name, filename=filename)
+    image_url = upload_result["secure_url"]
 
+    # Show image using Cloudinary URL
+    return render_template("result.html", name=name, image_url=image_url)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
