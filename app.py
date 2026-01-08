@@ -44,7 +44,7 @@ def save():
 
     image_url = upload_result["secure_url"]
 
-    # Show image using Cloudinary URL
+    
     return render_template("result.html", name=name, image_url=image_url)
 
 if __name__ == "__main__":
