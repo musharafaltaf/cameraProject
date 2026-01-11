@@ -35,7 +35,7 @@ def save():
 
     filename = name + "_" + datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    # Upload to Cloudinary
+    # Upload to Cloudinary   
     upload_result = cloudinary.uploader.upload(
         img,
         public_id=filename
