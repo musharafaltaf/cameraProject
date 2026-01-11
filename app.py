@@ -13,7 +13,7 @@ cloudinary.config(
     api_secret = "qv9Dq6_18jJzjx40V7X1Ok2bMOg"
 )
 
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  
 
 
 if not os.path.exists("static"):
